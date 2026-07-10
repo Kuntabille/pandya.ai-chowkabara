@@ -1,0 +1,1 @@
+{"name":"validate_game_code","description":"Validate the local lua logic and UI component code against the game contract.","parameters":{"properties":{"lua_script":{"description":"The lua script to validate","type":"string"},"ui_component_code":{"description":"The UI component code to validate","type":"string"}},"required":["lua_script","ui_component_code"],"type":"object"}}

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "pandya-dev": {
+      "type": "sse",
+      "url": "http://localhost:8080/mcp/sse",
+      "headers": {
+        "Authorization": "Bearer pandya_mcp_422bddce085528d8ce88b6281c26d391f8853f5cc8a01a4162db1803fa71e640"
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{"name":"delete_match","description":"Delete an existing match as a moderator.","parameters":{"properties":{"match_id":{"description":"ID of the match to delete","type":"string"}},"required":["match_id"],"type":"object"}}

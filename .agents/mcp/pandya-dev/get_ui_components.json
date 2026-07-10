@@ -1,0 +1,1 @@
+{"name":"get_ui_components","description":"Fetch the list and definitions of available React UI components for the game board.","parameters":{"properties":{},"required":[],"type":"object"}}

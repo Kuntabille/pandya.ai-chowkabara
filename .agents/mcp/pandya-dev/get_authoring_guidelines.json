@@ -1,0 +1,1 @@
+{"name":"get_authoring_guidelines","description":"Fetch standard guidelines and tips for creating games on the platform.","parameters":{"properties":{},"required":[],"type":"object"}}

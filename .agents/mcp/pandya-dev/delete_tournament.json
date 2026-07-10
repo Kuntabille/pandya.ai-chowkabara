@@ -1,0 +1,1 @@
+{"name":"delete_tournament","description":"Delete a tournament as a moderator.","parameters":{"properties":{"tournament_id":{"description":"ID of the tournament to delete","type":"string"}},"required":["tournament_id"],"type":"object"}}

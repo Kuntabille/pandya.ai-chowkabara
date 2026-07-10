@@ -1,0 +1,1 @@
+{"name":"simulate_game_logic","description":"Simulate the lua game logic to find runtime execution errors.","parameters":{"properties":{"lua_script":{"description":"The lua script to simulate","type":"string"}},"required":["lua_script"],"type":"object"}}

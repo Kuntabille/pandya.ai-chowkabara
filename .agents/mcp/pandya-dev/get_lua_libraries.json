@@ -1,0 +1,1 @@
+{"name":"get_lua_libraries","description":"Fetch documentation about the internal lua engine, APIs, hooks, and guidelines.","parameters":{"properties":{},"required":[],"type":"object"}}

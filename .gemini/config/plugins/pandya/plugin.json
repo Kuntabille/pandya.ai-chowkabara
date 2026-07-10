@@ -1,0 +1,14 @@
+{
+  "name": "pandya",
+  "description": "Context and tools for building games on pandya.ai",
+  "mcpServers": {
+    "pandya": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "pandya",
+        "mcp"
+      ]
+    }
+  }
+}

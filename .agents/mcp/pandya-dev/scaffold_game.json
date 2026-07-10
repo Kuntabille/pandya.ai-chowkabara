@@ -1,0 +1,1 @@
+{"name":"scaffold_game","description":"Scaffold a new pandya.ai game in the specified directory","parameters":{"properties":{"directory":{"description":"Directory to create game assets in","type":"string"}},"required":["directory"],"type":"object"}}
