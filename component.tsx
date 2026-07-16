@@ -91,8 +91,19 @@ export default function CustomGameBoard({ gameState, onMove, currentPlayerId }: 
             // Cluster pieces on the same square
             const piecesOnSquare = gameState.pieces.filter((p: any) => p.position === piece.position);
             const pieceIndex = piecesOnSquare.findIndex((p: any) => p.id === piece.id);
-            const offsetX = piecesOnSquare.length > 1 ? ((pieceIndex % 2 === 0) ? -15 : 15) : 0;
-            const offsetY = piecesOnSquare.length > 1 ? ((pieceIndex < 2) ? -15 : 15) : 0;
+            const N = piecesOnSquare.length;
+            
+            let offsetX = 0;
+            let offsetY = 0;
+            if (N > 1) {
+              const cols = Math.ceil(Math.sqrt(N));
+              const rows = Math.ceil(N / cols);
+              const spacing = N > 4 ? 16 : 20; // Tighter spacing if there are many pawns
+              const col = pieceIndex % cols;
+              const row = Math.floor(pieceIndex / cols);
+              offsetX = (col - (cols - 1) / 2) * spacing;
+              offsetY = (row - (rows - 1) / 2) * spacing;
+            }
 
             const isMyTurn = gameState.currentPlayerIndex === piece.ownerIndex;
             const isMe = String(piece.ownerIndex) === currentPlayerId;

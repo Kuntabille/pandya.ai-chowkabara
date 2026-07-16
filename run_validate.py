@@ -51,9 +51,9 @@ def main():
         "id": 1,
         "method": "tools/call",
         "params": {
-            "name": "validate_game_code",
+            "name": "validate_logic_and_canvas",
             "arguments": {
-                "gdl": gdl,
+                "canvas_json": gdl,
                 "lua_script": lua_script,
                 "ui_component_code": ui_code
             }
