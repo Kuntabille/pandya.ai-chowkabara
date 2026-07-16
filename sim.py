@@ -49,7 +49,7 @@ def main():
             try:
                 parsed = json.loads(line[6:])
                 if parsed.get("id") == 1:
-                    print(parsed.get("result", {}).get("text", "")[:1000])
+                    print(json.dumps(parsed.get("result", {}), indent=2))
                     break
             except:
                 pass

@@ -1,8 +1,9 @@
 import React from 'react';
+import { Dice, Pawn } from "@/game-components";
 
-export default function CustomGameBoard({ gameState, onMove, currentPlayerId }: { gameState: any, onMove: any, currentPlayerId: string }) {
-  if (!gameState || !gameState.variables) {
-    return <div>Loading Game State...</div>;
+export const CustomGameBoard = ({ gameState, onMove, currentPlayerId }: { gameState: any, onMove: any, currentPlayerId: string }) => {
+  if (!gameState) {
+    return <div className="game-container">Loading Game State...</div>;
   }
 
   const variant = gameState.variables?.variation || "5x5";
@@ -26,20 +27,21 @@ export default function CustomGameBoard({ gameState, onMove, currentPlayerId }: 
   const colorMap: any = { 0: '#e74c3c', 1: '#3498db', 2: '#f1c40f', 3: '#2ecc71' };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: 'sans-serif', background: '#2c3e50', color: 'white', minHeight: '100vh', padding: 20 }}>
+    <div className="game-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: 'sans-serif', background: '#2c3e50', color: 'white', minHeight: '100vh', padding: 20 }}>
       <div style={{ marginBottom: 20, fontSize: 18, fontWeight: 'bold' }}>
         {gameState.variables?.message}
       </div>
 
       <div style={{ display: 'flex', gap: 20, marginBottom: 20, alignItems: 'center', height: 80 }}>
         {gameState.variables?.phase === 'roll' ? (
-          // @ts-ignore
-          <Dice 
-            id="main_dice" 
-            results={[gameState.variables?.lastRoll || 1]} 
-            sides={8} 
-            onMove={onMove} 
-          />
+          <div id="main_dice">
+            {/* @ts-ignore */}
+            <Dice 
+              results={[gameState.variables?.lastRoll || 1]} 
+              sides={8} 
+              onMove={() => onMove({ actionId: 'roll' })} 
+            />
+          </div>
         ) : (
           <div style={{ padding: '10px 20px', fontSize: 16, background: '#34495e', color: 'white', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             Last Roll: {gameState.variables?.lastRoll}
@@ -80,7 +82,8 @@ export default function CustomGameBoard({ gameState, onMove, currentPlayerId }: 
         {/* The Pieces Overlay */}
         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', transform: `rotate(${boardRotation}deg)`, transition: 'transform 0.5s ease-in-out' }}>
           {gameState.pieces?.map((piece: any) => {
-            const coords = piece.position.split(',');
+            const posKey = piece.position || `${piece.x},${piece.y}`;
+            const coords = posKey.split(',');
             if (coords.length !== 2) return null;
             
             const x = parseInt(coords[0]);
@@ -89,7 +92,7 @@ export default function CustomGameBoard({ gameState, onMove, currentPlayerId }: 
             let cy = 50 + y * CELL_SIZE + CELL_SIZE / 2;
             
             // Cluster pieces on the same square
-            const piecesOnSquare = gameState.pieces.filter((p: any) => p.position === piece.position);
+            const piecesOnSquare = gameState.pieces.filter((p: any) => (p.position || `${p.x},${p.y}`) === posKey);
             const pieceIndex = piecesOnSquare.findIndex((p: any) => p.id === piece.id);
             const N = piecesOnSquare.length;
             
@@ -111,6 +114,7 @@ export default function CustomGameBoard({ gameState, onMove, currentPlayerId }: 
 
             return (
               <div 
+                id={`pawn_${piece.id}`}
                 key={piece.id}
                 style={{
                   position: 'absolute',
@@ -150,4 +154,6 @@ export default function CustomGameBoard({ gameState, onMove, currentPlayerId }: 
       </div>
     </div>
   );
-}
+};
+
+export default CustomGameBoard;
