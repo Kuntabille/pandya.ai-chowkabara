@@ -27,6 +27,7 @@ with open('component.tsx', 'r') as f:
 
 test_code = """
   await expect(page.locator('.game-container').first()).toBeVisible({ timeout: 5000 });
+  await page.locator('#main_dice').click();
 """
 
 payload = {

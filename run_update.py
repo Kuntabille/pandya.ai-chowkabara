@@ -36,7 +36,7 @@ payload = {
     "params": {
         "name": "update_game",
         "arguments": {
-            "game_id": "2867e756-2d6e-4dde-b087-5bb397ed2574",
+            "game_id": "a3449906-c0f5-42d7-9887-0340a8478c88",
             "component_code": component_code,
             "logic_script": logic_script,
             "canvas_json": canvas_json

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dice, Pawn } from "@/game-components";
+import { Cowrie, Pawn } from "@/game-components";
 
 export const CustomGameBoard = ({ gameState, onMove, currentPlayerId }: { gameState: any, onMove: any, currentPlayerId: string }) => {
   if (!gameState) {
@@ -34,17 +34,31 @@ export const CustomGameBoard = ({ gameState, onMove, currentPlayerId }: { gameSt
 
       <div style={{ display: 'flex', gap: 20, marginBottom: 20, alignItems: 'center', height: 80 }}>
         {gameState.variables?.phase === 'roll' ? (
-          <div id="main_dice">
-            {/* @ts-ignore */}
-            <Dice 
-              results={[gameState.variables?.lastRoll || 1]} 
-              sides={8} 
-              onMove={() => onMove({ actionId: 'roll' })} 
-            />
+          <div 
+            id="main_dice" 
+            onClick={() => onMove({ actionId: 'roll' })}
+            style={{ cursor: 'pointer', padding: 10, background: 'rgba(255,255,255,0.1)', borderRadius: 8, display: 'flex', gap: 10 }}
+          >
+            {(gameState.variables?.lastRollDice || (variant === "7x7" ? [0,0,0,0,0,0] : [0,0,0,0])).map((val: number, idx: number) => {
+              const piece = gameState.pieces?.filter((p: any) => p.templateId === 'cowrie')[idx];
+              return (
+                /* @ts-ignore */
+                <Cowrie key={piece ? piece.id : idx} id={piece?.id} result={val} />
+              );
+            })}
           </div>
         ) : (
-          <div style={{ padding: '10px 20px', fontSize: 16, background: '#34495e', color: 'white', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            Last Roll: {gameState.variables?.lastRoll}
+          <div style={{ padding: '10px 20px', fontSize: 16, background: '#34495e', color: 'white', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+            <span>Last Roll: {gameState.variables?.lastRoll}</span>
+            <div style={{ display: 'flex', gap: 5, pointerEvents: 'none', transform: 'scale(0.8)', transformOrigin: 'left center' }}>
+              {(gameState.variables?.lastRollDice || (variant === "7x7" ? [0,0,0,0,0,0] : [0,0,0,0])).map((val: number, idx: number) => {
+                const piece = gameState.pieces?.filter((p: any) => p.templateId === 'cowrie')[idx];
+                return (
+                  /* @ts-ignore */
+                  <Cowrie key={piece ? piece.id : idx} id={piece?.id} result={val} />
+                );
+              })}
+            </div>
           </div>
         )}
       </div>

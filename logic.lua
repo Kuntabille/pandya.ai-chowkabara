@@ -1,13 +1,3 @@
-local p1_path_5x5 = {{2,4},{3,4},{4,4},{4,3},{4,2},{4,1},{4,0},{3,0},{2,0},{1,0},{0,0},{0,1},{0,2},{0,3},{0,4},{1,4},{1,3},{2,3},{3,3},{3,2},{3,1},{2,1},{1,1},{1,2},{2,2}}
-local p2_path_5x5 = {{2,0},{1,0},{0,0},{0,1},{0,2},{0,3},{0,4},{1,4},{2,4},{3,4},{4,4},{4,3},{4,2},{4,1},{4,0},{3,0},{3,1},{2,1},{1,1},{1,2},{1,3},{2,3},{3,3},{3,2},{2,2}}
-local p3_path_5x5 = {{0,2},{0,3},{0,4},{1,4},{2,4},{3,4},{4,4},{4,3},{4,2},{4,1},{4,0},{3,0},{2,0},{1,0},{0,0},{0,1},{1,1},{1,2},{1,3},{2,3},{3,3},{3,2},{3,1},{2,1},{2,2}}
-local p4_path_5x5 = {{4,2},{4,1},{4,0},{3,0},{2,0},{1,0},{0,0},{0,1},{0,2},{0,3},{0,4},{1,4},{2,4},{3,4},{4,4},{4,3},{3,3},{3,2},{3,1},{2,1},{1,1},{1,2},{1,3},{2,3},{2,2}}
-
-local p1_path_7x7 = {{3,6},{4,6},{5,6},{6,6},{6,5},{6,4},{6,3},{6,2},{6,1},{6,0},{5,0},{4,0},{3,0},{2,0},{1,0},{0,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{1,6},{2,6},{2,5},{3,5},{4,5},{5,5},{5,4},{5,3},{5,2},{5,1},{4,1},{3,1},{2,1},{1,1},{1,2},{1,3},{1,4},{1,5},{2,4},{3,4},{4,4},{4,3},{4,2},{3,2},{2,2},{2,3},{3,3}}
-local p2_path_7x7 = {{3,0},{2,0},{1,0},{0,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{1,6},{2,6},{3,6},{4,6},{5,6},{6,6},{6,5},{6,4},{6,3},{6,2},{6,1},{6,0},{5,0},{4,0},{4,1},{3,1},{2,1},{1,1},{1,2},{1,3},{1,4},{1,5},{2,5},{3,5},{4,5},{5,5},{5,4},{5,3},{5,2},{5,1},{4,2},{3,2},{2,2},{2,3},{2,4},{3,4},{4,4},{4,3},{3,3}}
-local p3_path_7x7 = {{0,3},{0,4},{0,5},{0,6},{1,6},{2,6},{3,6},{4,6},{5,6},{6,6},{6,5},{6,4},{6,3},{6,2},{6,1},{6,0},{5,0},{4,0},{3,0},{2,0},{1,0},{0,0},{0,1},{0,2},{1,2},{1,3},{1,4},{1,5},{2,5},{3,5},{4,5},{5,5},{5,4},{5,3},{5,2},{5,1},{4,1},{3,1},{2,1},{1,1},{2,2},{2,3},{2,4},{3,4},{4,4},{4,3},{4,2},{3,2},{3,3}}
-local p4_path_7x7 = {{6,3},{6,2},{6,1},{6,0},{5,0},{4,0},{3,0},{2,0},{1,0},{0,0},{0,1},{0,2},{0,3},{0,4},{0,5},{0,6},{1,6},{2,6},{3,6},{4,6},{5,6},{6,6},{6,5},{6,4},{5,4},{5,3},{5,2},{5,1},{4,1},{3,1},{2,1},{1,1},{1,2},{1,3},{1,4},{1,5},{2,5},{3,5},{4,5},{5,5},{4,4},{4,3},{4,2},{3,2},{2,2},{2,3},{2,4},{3,4},{3,3}}
-
 local function get_variant()
     local v = game.get_variation and game.get_variation() or "5x5"
     if v == "7x7" then return "7x7" end
@@ -18,44 +8,27 @@ local function get_max_pos()
     if get_variant() == "7x7" then return 49 else return 25 end
 end
 
+local function get_path_id(player_index)
+    return "p" .. tostring(player_index + 1) .. "_path"
+end
+
 local function get_physical(player, pos, variant)
     if pos == 0 then return {-1, -1} end
-    if variant == "7x7" then
-        if player == 0 then return p1_path_7x7[pos] end
-        if player == 1 then return p2_path_7x7[pos] end
-        if player == 2 then return p3_path_7x7[pos] end
-        if player == 3 then return p4_path_7x7[pos] end
-    else
-        if player == 0 then return p1_path_5x5[pos] end
-        if player == 1 then return p2_path_5x5[pos] end
-        if player == 2 then return p3_path_5x5[pos] end
-        if player == 3 then return p4_path_5x5[pos] end
+    local path_id = get_path_id(player)
+    local pos_str = paths.get_node(path_id, pos)
+    if pos_str then
+        local x, y = string.match(pos_str, "(%d+),(%d+)")
+        return {tonumber(x), tonumber(y)}
     end
     return {-1, -1}
 end
 
 local function get_path_index(player, x, y, variant)
-    local path
-    if variant == "7x7" then
-        if player == 0 then path = p1_path_7x7
-        elseif player == 1 then path = p2_path_7x7
-        elseif player == 2 then path = p3_path_7x7
-        elseif player == 3 then path = p4_path_7x7
-        else return -1 end
-    else
-        if player == 0 then path = p1_path_5x5
-        elseif player == 1 then path = p2_path_5x5
-        elseif player == 2 then path = p3_path_5x5
-        elseif player == 3 then path = p4_path_5x5
-        else return -1 end
-    end
-    
-    for i, coords in ipairs(path) do
-        if coords[1] == x and coords[2] == y then
-            return i
-        end
-    end
-    return -1
+    local path_id = get_path_id(player)
+    local pos_str = x .. "," .. y
+    local idx = paths.get_index(path_id, pos_str)
+    if idx == 0 then return -1 end
+    return idx
 end
 
 local function is_safe(x, y, variant)
@@ -181,14 +154,26 @@ function on_move(player_index, action_id, move)
     
     if action_id == "roll" and phase == "roll" then
         local roll
+        local coins = {}
         if var == "7x7" then
-            local val = math.random(1, 7)
-            roll = (val == 7) and 12 or val
+            local sum = 0
+            for i = 1, 6 do
+                local c = math.random(0, 1)
+                sum = sum + c
+                table.insert(coins, c)
+            end
+            roll = (sum == 0) and 12 or sum
         else
-            local val = math.random(1, 5)
-            roll = (val == 5) and 8 or val
+            local sum = 0
+            for i = 1, 4 do
+                local c = math.random(0, 1)
+                sum = sum + c
+                table.insert(coins, c)
+            end
+            roll = (sum == 0) and 8 or sum
         end
         game.set_var("lastRoll", roll)
+        game.set_var("lastRollDice", coins)
         
         local can_move = false
         if pieces[p_str] then
