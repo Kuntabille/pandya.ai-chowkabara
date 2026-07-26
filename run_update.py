@@ -28,6 +28,8 @@ with open('logic.lua', 'r') as f:
     logic_script = f.read()
 with open('canvas.json', 'r') as f:
     canvas_json = f.read()
+with open('INSTRUCTIONS.md', 'r') as f:
+    instructions_markdown = f.read()
 
 payload = {
     "jsonrpc": "2.0",
@@ -39,7 +41,8 @@ payload = {
             "game_id": "a3449906-c0f5-42d7-9887-0340a8478c88",
             "component_code": component_code,
             "logic_script": logic_script,
-            "canvas_json": canvas_json
+            "canvas_json": canvas_json,
+            "instructions_markdown": instructions_markdown
         }
     }
 }
