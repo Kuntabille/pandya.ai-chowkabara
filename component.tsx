@@ -6,7 +6,10 @@ export const CustomGameBoard = ({ gameState, onMove, currentPlayerId }: { gameSt
     return <div className="game-container">Loading Game State...</div>;
   }
 
-  const variant = gameState.variables?.variation || "5x5";
+  const readVars = (s: any) => s?.variables ?? s?.vars ?? s?.gameState?.variables ?? s?.gameState?.vars ?? {};
+  const vars = readVars(gameState);
+
+  const variant = vars.variation || "5x5";
   const gridLength = variant === "7x7" ? 7 : 5;
   const CELL_SIZE = variant === "7x7" ? 60 : 80;
   const BOARD_SIZE = gridLength * CELL_SIZE;
@@ -20,26 +23,33 @@ export const CustomGameBoard = ({ gameState, onMove, currentPlayerId }: { gameSt
   };
 
   let boardRotation = 0;
-  if (currentPlayerId === '1') boardRotation = 180;
-  else if (currentPlayerId === '2') boardRotation = 270;
-  else if (currentPlayerId === '3') boardRotation = 90;
+  if (!gameState.disableRotation) {
+    if (currentPlayerId === '1') boardRotation = 180;
+    else if (currentPlayerId === '2') boardRotation = 270;
+    else if (currentPlayerId === '3') boardRotation = 90;
+  }
 
   const colorMap: any = { 0: '#e74c3c', 1: '#3498db', 2: '#f1c40f', 3: '#2ecc71' };
+
+  let diceArray = vars.lastRollDice;
+  if (!Array.isArray(diceArray)) {
+    diceArray = variant === "7x7" ? [0,0,0,0,0,0] : [0,0,0,0];
+  }
 
   return (
     <div className="game-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', fontFamily: 'sans-serif', background: '#2c3e50', color: 'white', minHeight: '100vh', padding: 20 }}>
       <div style={{ marginBottom: 20, fontSize: 18, fontWeight: 'bold' }}>
-        {gameState.variables?.message}
+        {vars.message}
       </div>
 
       <div style={{ display: 'flex', gap: 20, marginBottom: 20, alignItems: 'center', height: 80 }}>
-        {gameState.variables?.phase === 'roll' ? (
+        {vars.phase === 'roll' ? (
           <div 
             id="main_dice" 
             onClick={() => onMove({ actionId: 'roll' })}
             style={{ cursor: 'pointer', padding: 10, background: 'rgba(255,255,255,0.1)', borderRadius: 8, display: 'flex', gap: 10 }}
           >
-            {(gameState.variables?.lastRollDice || (variant === "7x7" ? [0,0,0,0,0,0] : [0,0,0,0])).map((val: number, idx: number) => {
+            {diceArray.map((val: number, idx: number) => {
               const piece = gameState.pieces?.filter((p: any) => p.templateId === 'cowrie')[idx];
               return (
                 /* @ts-ignore */
@@ -49,9 +59,9 @@ export const CustomGameBoard = ({ gameState, onMove, currentPlayerId }: { gameSt
           </div>
         ) : (
           <div style={{ padding: '10px 20px', fontSize: 16, background: '#34495e', color: 'white', borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-            <span>Last Roll: {gameState.variables?.lastRoll}</span>
+            <span>Last Roll: {vars.lastRoll}</span>
             <div style={{ display: 'flex', gap: 5, pointerEvents: 'none', transform: 'scale(0.8)', transformOrigin: 'left center' }}>
-              {(gameState.variables?.lastRollDice || (variant === "7x7" ? [0,0,0,0,0,0] : [0,0,0,0])).map((val: number, idx: number) => {
+              {diceArray.map((val: number, idx: number) => {
                 const piece = gameState.pieces?.filter((p: any) => p.templateId === 'cowrie')[idx];
                 return (
                   /* @ts-ignore */
